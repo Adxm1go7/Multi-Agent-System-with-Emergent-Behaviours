@@ -1,0 +1,62 @@
+Abstract
+
+Table of Contents
+
+Intro:
+	Background & Motivation
+	Problem definition
+	Aims, objectives
+	Scope, limitations
+	Dissertation structure
+	Introduction to problem ?
+
+Literature Review:
+	Agent based modelling
+	Classical models 
+	Real world opinion dynamics
+	Visualisation of emergent behaviour
+	
+	Summary + research gap that my project will fill
+
+Design & Methodology:
+	Research methodology
+	Model Design
+	Data collection
+	Experimental design
+	Evaluation criteria
+
+Implementation:
+	Technology, software, hardware used
+
+	Base Case:
+		Implementation of Agent, model, visualisation
+		Limitations
+	Extension1:
+		Implementation changes of Agent, model, visualisation
+		Limitations
+	Extension2:
+		Implementation changes of Agent, model, visualisation
+		Limitations
+	...
+
+Results & Analysis:
+	Baseline behaviour
+	Extension behaviour
+	Changes in variable value
+	Consistency of results
+
+Discussion:
+	Interpret results to real world + abstraction
+	Literature comparison
+	Implications for model design
+	Validity threats
+
+Conclusion:
+	Conclusion
+	Potential improvements to work
+
+References
+
+Appendices:
+	Full source code
+	Parameter table
