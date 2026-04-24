@@ -2,7 +2,7 @@ from mesa.discrete_space import CellAgent, FixedAgent
 
 class OpinionAgent(FixedAgent):
 
-    def __init__(self, model, cell, opinion, convince_range, converge_mult, stubborn):
+    def __init__(self, model, cell, opinion, convince_range, converge_mult, is_stubborn):
 
         super().__init__(model)
 
@@ -15,7 +15,7 @@ class OpinionAgent(FixedAgent):
         #When convinced, how much cells converge
         self.converge_mult = converge_mult
 
-        self.stubborn = stubborn
+        self.is_stubborn = is_stubborn
 
 
     def talkToOneNeighbour(self): 
@@ -23,14 +23,15 @@ class OpinionAgent(FixedAgent):
 
         if cell.agents:
             neighborAgent = cell.agents[0]
+
             if (abs(self.opinion - neighborAgent.opinion) <= self.convince_range):
-                if not self.stubborn:
-                    new_opinion = self.opinion + self.converge_mult * (neighborAgent.opinion - self.opinion)
+                if not self.is_stubborn:
+                    if self.model.scenario.opinion_type == "continuous":
+                        self.opinion = self.opinion + self.converge_mult * (neighborAgent.opinion - self.opinion)
 
-                    if self.model.scenario.opinion_type != "continuous":
-                        new_opinion = self.snap_to_discrete(new_opinion)
-
-                    self.opinion = new_opinion
+                    else:
+                        new_opinion = self.opinion + self.converge_mult * (neighborAgent.opinion - self.opinion)
+                        self.opinion = self.snap_to_discrete(new_opinion)
         
     def snap_to_discrete(self, value):
         valid = {
@@ -42,7 +43,9 @@ class OpinionAgent(FixedAgent):
 
         closest = options[0]
         for x in range(1, len(options)):
-            if (abs(options[x] - value) < abs(closest - value)):
+            if (abs(options[x] - value) == abs(closest - value)):
+                closest = self.random.choice([options[x], closest])
+            elif (abs(options[x] - value) < abs(closest - value)):
                 closest = options[x]
 
         return closest

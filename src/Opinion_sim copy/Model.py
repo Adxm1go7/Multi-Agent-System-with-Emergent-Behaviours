@@ -9,12 +9,9 @@ from Agents import OpinionAgent
 
 
 class OpinionScenario(Scenario):
-    grid_length: int = 10
-    n_agents: int = grid_length ** 2
+    grid_length: int = 80
+    initial_agents: int = grid_length
     convince_range: int = 0.25
-    converge_mult: int = 0.3
-    opinion_type: str = "continuous"
-    stubborn_fraction: float = 0.0
 
 
 class OpinionDynamicsModel(Model):
@@ -25,16 +22,16 @@ class OpinionDynamicsModel(Model):
             scenario = OpinionScenario()
 
         super().__init__(scenario=scenario)
-
-        self.grid_length = scenario.grid_length
-
+        # Size of simulation component
         self.fig_height = 6
         self.fig_width = 6
 
-        self.cell_size_multipliers = [2970, 1300, 570, 430, 430, 340, 280, 240, 200, 170]
+        self.grid_length = scenario.grid_length
+
+        self.cell_size_multipliers = [2970, 1300, 570, 430, 380, 340, 280, 240, 200, 170]
         self.display_size = (self.fig_width * self.cell_size_multipliers[(self.grid_length//10) - 1] / self.grid_length)
 
-        self.n_agents = self.grid_length ** 2
+        self.initial_agents = self.grid_length ** 2
 
         self.grid = OrthogonalMooreGrid(
             [self.grid_length, self.grid_length],
@@ -53,35 +50,19 @@ class OpinionDynamicsModel(Model):
 
         OpinionAgent.create_agents(
             self,
-            self.n_agents,
+            self.initial_agents,
             self.random.sample(
-                self.grid.all_cells.cells, k=self.n_agents
+                self.grid.all_cells.cells, k=self.initial_agents
             ),
-            [self.generate_opinion(scenario.opinion_type) for _ in range(self.n_agents)],
-            scenario.convince_range,
-            scenario.converge_mult,
-            self.assign_stubborn(self.n_agents, scenario.stubborn_fraction)
+            [self.random.uniform(0.0, 1.0) for _ in range(self.initial_agents)],
+            scenario.convince_range
         )
 
         self.datacollector.collect(self)
 
-    def assign_stubborn(self, n_agents, stubborn_fraction):
-        n_stubborn = round(n_agents * stubborn_fraction)
-        flags = [True] * n_stubborn + [False] * (n_agents - n_stubborn)
-        self.random.shuffle(flags)
-        return flags
-
-    def generate_opinion(self, opinion_type):
-        if opinion_type == "continuous":
-            return self.random.uniform(0.0, 1.0)
-        elif opinion_type == "binary":
-            return self.random.choice([0.0, 1.0])
-        elif opinion_type == "ternary":
-            return self.random.choice([0.0, 0.5, 1.0])
-        elif opinion_type == "quadrary":
-            return self.random.choice([0.0, 0.33, 0.67, 1.0])
-
     def step(self):
         self.agents.shuffle_do("step")
         self.datacollector.collect(self)
-
+        print(self.cell_size_multipliers[(self.grid_length//10) - 1])
+        print(self.grid_length)
+        print(self.display_size)

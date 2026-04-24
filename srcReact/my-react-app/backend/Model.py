@@ -28,12 +28,6 @@ class OpinionDynamicsModel(Model):
 
         self.grid_length = scenario.grid_length
 
-        self.fig_height = 6
-        self.fig_width = 6
-
-        self.cell_size_multipliers = [2970, 1300, 570, 430, 430, 340, 280, 240, 200, 170]
-        self.display_size = (self.fig_width * self.cell_size_multipliers[(self.grid_length//10) - 1] / self.grid_length)
-
         self.n_agents = self.grid_length ** 2
 
         self.grid = OrthogonalMooreGrid(
@@ -84,4 +78,5 @@ class OpinionDynamicsModel(Model):
     def step(self):
         self.agents.shuffle_do("step")
         self.datacollector.collect(self)
+        print(self.scenario.converge_mult)
 

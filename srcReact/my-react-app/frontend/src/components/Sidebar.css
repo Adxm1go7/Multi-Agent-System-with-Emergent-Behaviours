@@ -1,0 +1,101 @@
+/* Sidebar.css */
+.sidebar {
+  width: 300px;
+  min-width: 300px;
+  background: #f5f5f5;
+  border-right: 1px solid #ddd;
+  overflow-y: auto;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.sidebar-heading {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #333;
+}
+
+.sidebar-section {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Individual parameter row */
+.param {
+  display: grid;
+  grid-template-columns: 1fr auto auto; /* label | slider | value */
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.param-checkbox {
+  grid-template-columns: auto 1fr;
+}
+
+.param-label {
+  font-size: 12px;
+  color: #555;
+  grid-column: 1 / -1;  /* label spans full width above slider */
+}
+
+.param-slider {
+  grid-column: 1 / 3;
+  width: 100%;
+  accent-color: #1565c0;
+}
+
+.param-value {
+  font-size: 11px;
+  color: #333;
+  min-width: 32px;
+  text-align: right;
+}
+
+.param-select {
+  grid-column: 1 / -1;
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 12px;
+  background: white;
+}
+
+/* Buttons */
+.btn-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.btn {
+  flex: 1;
+  padding: 8px 0;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+}
+
+.btn-reset { background: #e0e0e0; color: #333; }
+.btn-play  { background: #1565c0; color: white; }
+.btn-step  { background: #e0e0e0; color: #333; }
+
+.btn:hover { filter: brightness(0.92); }
+
+/* Info section */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.info-key { font-weight: 500; }
+.info-val  { color: #333; }

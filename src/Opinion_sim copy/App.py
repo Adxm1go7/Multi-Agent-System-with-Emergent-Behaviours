@@ -101,66 +101,36 @@ def red_blue_gradient(value):
 def OpinionAgent_portrayal(agent):
     if agent is None:
         return
-    
-    size=model.display_size
 
 
     return AgentPortrayalStyle(
-        size=size,
+        size=model.display_size,
         marker="s",
         color=red_blue_gradient(agent.opinion),
     )
 
 def post_process_space(ax):
-    ax.set_aspect("equal", adjustable="box")
+    ax.set_aspect("equal")
     ax.set_xticks([])
     ax.set_yticks([])
+    #ax.imshow(model.grid, interpolation="nearest", aspect="equal")
 
     ax.figure.set_size_inches(model.fig_width, model.fig_height)
 
-
 model_params = {
-    "grid_length": {
-        "type": "Select",
-        "label": "Grid Size",
-        "value": 10,
-        "values": [10, 20, 30, 50, 100],
-    },
-
-    "convince_range": Slider (
-        "Max Difference to Converge",
-        0.25,
-        0.0,
-        1.0,
-        0.01
-    ),
-
-    "converge_mult": Slider (
-        "Convergence Multiplier",
-        0.3,
-        0.0,
-        1.0,
-        0.05
-    ),
-
-    "opinion_type": {
-        "type": "Select",
-        "label": "Opinion Type",
-        "value": "continuous",
-        "values": ["continuous", "binary", "ternary", "quadrary"],
-    },
-
-    "stubborn_fraction": Slider(
-        "Stubborn Agent Fraction",
-        0.0,
-        0.0,
-        0.5,
-        0.05,
+    "grid_length": Slider(
+        "Grid Size",
+        model.grid_length,
+        10, 
+        100,
+        10
     )
-    
 }
 
-renderer = SpaceRenderer(model, backend="matplotlib")
+renderer = SpaceRenderer(
+    model,
+    backend="matplotlib",
+)
 renderer.setup_agents(OpinionAgent_portrayal)
 renderer.post_process = post_process_space
 renderer.draw_agents()

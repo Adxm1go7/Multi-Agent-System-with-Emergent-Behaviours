@@ -1,0 +1,15 @@
+/* Navbar.css */
+.navbar {
+  height: 48px;
+  background: #1565c0;       /* Solara's blue */
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}

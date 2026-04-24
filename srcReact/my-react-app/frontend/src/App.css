@@ -1,0 +1,32 @@
+/* App.css — top level layout only */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { font-family: Roboto, sans-serif; }
+
+/* Full viewport below navbar */
+.app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Sidebar + main side by side */
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Main content area */
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  background: #ececec;
+}
+
+/* Content below the tabs */
+.page-content {
+  padding: 24px;
+}

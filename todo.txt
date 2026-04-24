@@ -1,0 +1,5 @@
+1. Add core parameters: 
+    - Model size + turn App into class
+    - Difference in values for Convergence to happen
+    - Colour Steps (Maybe add option for just 2 states)
+    - value change when Convergence happens
