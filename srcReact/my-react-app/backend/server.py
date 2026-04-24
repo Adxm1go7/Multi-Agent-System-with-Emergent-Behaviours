@@ -2,7 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from Model import OpinionDynamicsModel, OpinionScenario
 
+import numpy as np
+
 from pydantic import BaseModel
+
+from typing import Optional
 
 app = FastAPI()
 
@@ -19,9 +23,13 @@ model = OpinionDynamicsModel()
 
 def serialize_grid(model):
     """Pull agent positions and opinions out of the Mesa model."""
+    current_variance = float(np.var([a.opinion for a in model.agents]))
+
     return {
         "step": model.steps,
         "grid_length": model.grid_length,
+        "seed": model.scenario.seed,
+        "variance_history":model.variance_history,
         "agents": [
             {
                 "row": a.cell.coordinate[0],
@@ -43,6 +51,9 @@ class ResetParams(BaseModel):
     bias:            float = 0.5
     biasStrength:    float = 0.0
 
+    seed:            Optional[int] = None  # None = random, int = reproducible
+
+
 
 @app.post("/reset")
 def reset(params: ResetParams):
@@ -54,13 +65,16 @@ def reset(params: ResetParams):
         opinion_type      = params.opinionType,
         stubborn_fraction = params.stubbornFrac,
         bias           = params.bias,
-        bias_strength  = params.biasStrength
+        bias_strength  = params.biasStrength,
+
+        seed = params.seed if params.seed is not None else int(np.random.randint(0, 99999)),
     )
     model = OpinionDynamicsModel(scenario=scenario)
     return serialize_grid(model)
 
 @app.post("/step")
 def step():
+    global variance_history
     model.step()
     return serialize_grid(model)
 

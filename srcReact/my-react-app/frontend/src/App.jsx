@@ -21,17 +21,69 @@ function App() {
   const [bias, setBias]               = useState(0.5);
   const [biasStrength, setBiasStrength] = useState(0.0);
 
+  const [seed, setSeed] = useState(""); // empty string = random
+
+  const [maxSteps, setMaxSteps]             = useState("");      // blank = no limit
+  const [varianceThreshold, setVarianceThreshold] = useState(""); // blank = no limit
+
+  // Check stopping conditions after every step
+  useEffect(() => {
+    if (!simState || !isPlaying) return;
+
+    const currentVariance = simState.variance_history?.at(-1);
+    const currentStep     = simState.step;
+
+    // Stop if variance is below threshold
+    if (varianceThreshold !== "" && currentVariance !== undefined) {
+      if (currentVariance <= parseFloat(varianceThreshold)) {
+        setIsPlaying(false);
+        console.log(`Stopped: variance ${currentVariance} below threshold ${varianceThreshold}`);
+        return;
+      }
+    }
+
+    // Stop if max steps reached
+    if (maxSteps !== "" && currentStep >= parseInt(maxSteps)) {
+      setIsPlaying(false);
+      console.log(`Stopped: reached max steps ${maxSteps}`);
+      return;
+    }
+
+  }, [simState, isPlaying, varianceThreshold, maxSteps]);
+
+  const stoppedReason = () => {
+    if (!simState) return null;
+    const v = simState.variance_history?.at(-1);
+    if (varianceThreshold !== "" && v <= parseFloat(varianceThreshold)) return "Converged";
+    if (maxSteps !== "" && simState.step >= parseInt(maxSteps)) return "Max steps reached";
+    return null;
+  };
+
+  const info = {
+    "Step":        simState?.step ?? 0,
+    "Variance":    simState?.variance_history?.at(-1)?.toFixed(4) ?? "—",
+    "Active Seed": simState?.seed ?? "—",
+    "Status":      stoppedReason() ?? (isPlaying ? "Running" : "Paused"),
+  };
+
   const doReset = useCallback(async () => {
     setIsPlaying(false);  // ← stop playing on reset
     const res = await fetch(`${API}/reset`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        gridSize, convinceRange, convergenceMult, opinionType, stubbornFrac, bias, biasStrength
+        gridSize, 
+        convinceRange,
+         convergenceMult, 
+         opinionType, 
+         stubbornFrac, 
+         bias, 
+         biasStrength, 
+         seed: seed === "" ? null : parseInt(seed),
       }),
     });
     setSimState(await res.json());
-  }, [gridSize, convinceRange, convergenceMult, opinionType, stubbornFrac, bias, biasStrength]);
+  }, [gridSize, convinceRange, convergenceMult, opinionType, stubbornFrac, bias, biasStrength, seed]);
 
   // ── Step: advance the model one tick, update grid ────────────────────────
   const doStep = useCallback(async () => {
@@ -103,6 +155,18 @@ function App() {
       value: biasStrength, onChange: setBiasStrength,
       min: 0.0, max: 1.0, step: 0.05,
     },
+    {
+      key: "maxSteps", label: "Max Steps (blank = unlimited)",
+      type: "numberinput",
+      value: maxSteps, onChange: setMaxSteps,
+      placeholder: "e.g. 500",
+    },
+    {
+      key: "varianceThreshold", label: "Stop at Variance ≤ (blank = never)",
+      type: "numberinput",
+      value: varianceThreshold, onChange: setVarianceThreshold,
+      placeholder: "e.g. 0.001",
+    },
   ];
 
   return (
@@ -115,9 +179,11 @@ function App() {
           onStep={doStep}
           onPlay={doPlay}
           isPlaying={isPlaying}
-          info={{ "Step": simState.step }}
+          info={{ "Step": simState.step, "Active Seed": simState.seed ?? "—", }}
           playInterval={playInterval}
           onPlayIntervalChange={setPlayInterval}
+          seed={seed}
+          onSeedChange={setSeed}
         />
       <main className="app-main">
         <SimGrid

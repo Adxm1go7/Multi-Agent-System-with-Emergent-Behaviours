@@ -19,6 +19,8 @@ class OpinionScenario(Scenario):
     bias: float = 0.5
     bias_strength: float = 0.0
 
+    seed: int = 42
+
 
 class OpinionDynamicsModel(Model):
     description = "A model for simulating opinion convergence"
@@ -27,7 +29,7 @@ class OpinionDynamicsModel(Model):
         if scenario is None:
             scenario = OpinionScenario()
 
-        super().__init__(scenario=scenario)
+        super().__init__(scenario=scenario, seed=scenario.seed)
 
         self.grid_length = scenario.grid_length
 
@@ -68,6 +70,14 @@ class OpinionDynamicsModel(Model):
         flags = [True] * n_stubborn + [False] * (n_agents - n_stubborn)
         self.random.shuffle(flags)
         return flags
+    
+    @property
+    def variance_history(self):
+        df = self.datacollector.get_model_vars_dataframe()
+        if df.empty:
+            return []
+        return df["Opinion_variance"].tolist()
+
     """ 
     def generate_opinion(self, opinion_type):
         if opinion_type == "continuous":

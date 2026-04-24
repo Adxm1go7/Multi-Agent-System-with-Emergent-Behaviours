@@ -46,6 +46,21 @@ function SliderParam({ label, value, min, max, step, onChange }) {
   );
 }
 
+function NumberInputParam({ label, value, onChange, placeholder }) {
+  return (
+    <div className="param">
+      <label className="param-label">{label}</label>
+      <input
+        type="number"
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="param-select"   // reuse your existing input styling
+      />
+    </div>
+  );
+}
+
 function SelectParam({ label, value, options, onChange }) {
   return (
     <div className="param">
@@ -86,6 +101,8 @@ export default function Sidebar({
   info = {},
   playInterval,
   onPlayIntervalChange,
+  seed,
+  onSeedChange,
 }) {
   return (
     <aside className="sidebar">
@@ -101,6 +118,17 @@ export default function Sidebar({
           min={50} max={1000} step={50}
           onChange={onPlayIntervalChange}
         />
+
+        <div className="param">
+          <label className="param-label">Random Seed (blank = random)</label>
+          <input
+            type="number"
+            value={seed}
+            onChange={e => onSeedChange(e.target.value)}
+            placeholder="e.g. 42"
+            className="param-select"   // reuse the same styling as your dropdowns
+          />
+        </div>
 
         {/* Action buttons */}
         <div className="btn-row">
@@ -127,6 +155,10 @@ export default function Sidebar({
           if (p.type === "checkbox") return (
             <CheckboxParam key={p.key} label={p.label} value={p.value}
               onChange={p.onChange} />
+          );
+          if (p.type === "numberinput") return (
+            <NumberInputParam key={p.key} label={p.label} value={p.value}
+              onChange={p.onChange} placeholder={p.placeholder} />
           );
           return null;
         })}
