@@ -18,6 +18,8 @@ function App() {
   const [stubbornFrac, setStubbornFrac]       = useState(0.0);
   const [playInterval, setPlayInterval]       = useState(200);
   const [isPlaying, setIsPlaying]             = useState(false);
+  const [bias, setBias]               = useState(0.5);
+  const [biasStrength, setBiasStrength] = useState(0.0);
 
   const doReset = useCallback(async () => {
     setIsPlaying(false);  // ← stop playing on reset
@@ -25,11 +27,11 @@ function App() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        gridSize, convinceRange, convergenceMult, opinionType, stubbornFrac
+        gridSize, convinceRange, convergenceMult, opinionType, stubbornFrac, bias, biasStrength
       }),
     });
     setSimState(await res.json());
-  }, [gridSize, convinceRange, convergenceMult, opinionType, stubbornFrac]);
+  }, [gridSize, convinceRange, convergenceMult, opinionType, stubbornFrac, bias, biasStrength]);
 
   // ── Step: advance the model one tick, update grid ────────────────────────
   const doStep = useCallback(async () => {
@@ -88,6 +90,18 @@ function App() {
       type: "slider",
       value: stubbornFrac, onChange: setStubbornFrac,
       min: 0.0, max: 0.5, step: 0.05,
+    },
+    {
+      key: "bias", label: "Opinion Bias (0=red, 1=blue)",
+      type: "slider",
+      value: bias, onChange: setBias,
+      min: 0.0, max: 1.0, step: 0.05,
+    },
+    {
+      key: "biasStrength", label: "Bias Strength (0=uniform)",
+      type: "slider",
+      value: biasStrength, onChange: setBiasStrength,
+      min: 0.0, max: 1.0, step: 0.05,
     },
   ];
 

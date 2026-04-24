@@ -40,6 +40,9 @@ class ResetParams(BaseModel):
     opinionType:      str   = "continuous"
     stubbornFrac:     float = 0.0
 
+    bias:            float = 0.5
+    biasStrength:    float = 0.0
+
 
 @app.post("/reset")
 def reset(params: ResetParams):
@@ -50,6 +53,8 @@ def reset(params: ResetParams):
         converge_mult  = params.convergenceMult,
         opinion_type      = params.opinionType,
         stubborn_fraction = params.stubbornFrac,
+        bias           = params.bias,
+        bias_strength  = params.biasStrength
     )
     model = OpinionDynamicsModel(scenario=scenario)
     return serialize_grid(model)
