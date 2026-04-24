@@ -7,6 +7,8 @@ import numpy as np
 
 from Agents import OpinionAgent
 
+from Agents import BroadcastAgent
+
 
 class OpinionScenario(Scenario):
     grid_length: int = 10
@@ -18,6 +20,9 @@ class OpinionScenario(Scenario):
 
     bias: float = 0.5
     bias_strength: float = 0.0
+
+    n_broadcasters:      int   = 0
+    broadcast_opinion:   float = 1.0
 
     seed: int = 42
 
@@ -33,7 +38,7 @@ class OpinionDynamicsModel(Model):
 
         self.grid_length = scenario.grid_length
 
-        self.n_agents = self.grid_length ** 2
+        self.n_agents = (self.grid_length ** 2) - scenario.n_broadcasters
 
         self.grid = OrthogonalMooreGrid(
             [self.grid_length, self.grid_length],
@@ -62,6 +67,26 @@ class OpinionDynamicsModel(Model):
             scenario.converge_mult,
             self.assign_stubborn(self.n_agents, scenario.stubborn_fraction)
         )
+
+        # Place broadcasters in remaining empty cells
+        if scenario.n_broadcasters > 0:
+            occupied = {a.cell for a in self.agents}
+            empty_cells = [c for c in self.grid.all_cells.cells if c not in occupied]
+
+            if len(empty_cells) >= scenario.n_broadcasters:
+                broadcast_cells = self.random.sample(empty_cells, k=scenario.n_broadcasters)
+            else:
+                # Not enough empty cells — reduce to available
+                broadcast_cells = empty_cells
+
+            BroadcastAgent.create_agents(
+                self,
+                len(broadcast_cells),
+                broadcast_cells,
+                [scenario.broadcast_opinion] * len(broadcast_cells),
+                scenario.convince_range,
+                scenario.converge_mult,
+            )
 
         self.datacollector.collect(self)
 

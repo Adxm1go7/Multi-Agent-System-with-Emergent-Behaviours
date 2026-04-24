@@ -36,6 +36,7 @@ def serialize_grid(model):
                 "col": a.cell.coordinate[1],
                 "opinion": a.opinion,
                 "is_stubborn": a.is_stubborn,
+                "is_broadcaster": getattr(a, "is_broadcaster", False),
             }
             for a in model.agents
         ]
@@ -50,6 +51,9 @@ class ResetParams(BaseModel):
 
     bias:            float = 0.5
     biasStrength:    float = 0.0
+
+    nBroadcasters:    int   = 0
+    broadcastOpinion: float = 1.0
 
     seed:            Optional[int] = None  # None = random, int = reproducible
 
@@ -66,6 +70,9 @@ def reset(params: ResetParams):
         stubborn_fraction = params.stubbornFrac,
         bias           = params.bias,
         bias_strength  = params.biasStrength,
+
+        n_broadcasters    = params.nBroadcasters,
+        broadcast_opinion = params.broadcastOpinion,
 
         seed = params.seed if params.seed is not None else int(np.random.randint(0, 99999)),
     )

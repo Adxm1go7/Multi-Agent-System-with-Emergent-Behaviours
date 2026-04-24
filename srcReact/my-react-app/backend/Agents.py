@@ -17,6 +17,8 @@ class OpinionAgent(FixedAgent):
 
         self.is_stubborn = is_stubborn
 
+        self.is_broadcaster = False
+
 
     def talkToOneNeighbour(self): 
         cell = self.cell.get_neighborhood(include_center=False).select_random_cell()
@@ -56,3 +58,34 @@ class OpinionAgent(FixedAgent):
 
 
 
+
+class BroadcastAgent(OpinionAgent):
+    """
+    A stubborn broadcaster that pushes its opinion to all neighbours
+    every step. Never updates its own opinion.
+    Models media influence or opinion leaders.
+    """
+
+    def __init__(self, model, cell, opinion, convince_range, converge_mult):
+        # is_stubborn=True so it never updates its own opinion
+        super().__init__(model, cell, opinion, convince_range, converge_mult, is_stubborn=True)
+        self.is_broadcaster = True
+
+    def broadcast(self):
+        """Push opinion to all neighbours within range."""
+        neighborhood = self.cell.get_neighborhood(include_center=False)
+
+        for cell in neighborhood.cells:
+            if cell.agents:
+                neighbour = cell.agents[0]
+                # Broadcasters bypass convince_range — always influence
+                if not neighbour.is_stubborn and not neighbour.is_broadcaster:
+                    neighbour.opinion = neighbour.opinion + self.converge_mult * (self.opinion - neighbour.opinion)
+
+                    # Snap if discrete mode
+                    if self.model.scenario.opinion_type != "continuous":
+                        neighbour.opinion = neighbour.snap_to_discrete(neighbour.opinion)
+
+    def step(self):
+        # Broadcast to all neighbours instead of talking to one
+        self.broadcast()

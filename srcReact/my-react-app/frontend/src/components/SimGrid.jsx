@@ -41,8 +41,26 @@ export default function SimGrid({ agents = [], gridLength = 10, size = 500 }) {
           cellSize - gap * 2,
         );
 
+        // Draw broadcaster agents with a bright white ring
+        if (agent?.is_broadcaster) {
+          const cx = col * cellSize + cellSize / 2;
+          const cy = row * cellSize + cellSize / 2;
+          const half = (cellSize / 2) - gap;
 
-        if (agent?.is_stubborn) {
+          ctx.fillStyle = opinionToColor(agent.opinion);
+          ctx.beginPath();
+          ctx.moveTo(cx,        cy - half);  // top
+          ctx.lineTo(cx + half, cy);         // right
+          ctx.lineTo(cx,        cy + half);  // bottom
+          ctx.lineTo(cx - half, cy);         // left
+          ctx.closePath();
+          ctx.fill();
+
+          // White outline so it stands out
+          ctx.strokeStyle = "white";
+          ctx.lineWidth   = 1;
+          ctx.stroke();
+        } else if (agent?.is_stubborn) {
           const cx = col * cellSize + cellSize / 2;
           const cy = row * cellSize + cellSize / 2;
           const radius = Math.max(1, cellSize * 0.10);
@@ -54,6 +72,7 @@ export default function SimGrid({ agents = [], gridLength = 10, size = 500 }) {
       }
     }
   }, [agents, gridLength, size, cellSize]);
+
 
   return <canvas ref={canvasRef} width={size} height={size} />;
 }

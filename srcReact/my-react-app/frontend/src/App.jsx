@@ -21,6 +21,9 @@ function App() {
   const [bias, setBias]               = useState(0.5);
   const [biasStrength, setBiasStrength] = useState(0.0);
 
+  const [nBroadcasters,    setNBroadcasters]    = useState(0);
+  const [broadcastOpinion, setBroadcastOpinion] = useState(1.0);
+
   const [seed, setSeed] = useState(""); // empty string = random
 
   const [maxSteps, setMaxSteps]             = useState("");      // blank = no limit
@@ -74,16 +77,18 @@ function App() {
       body: JSON.stringify({
         gridSize, 
         convinceRange,
-         convergenceMult, 
-         opinionType, 
-         stubbornFrac, 
-         bias, 
-         biasStrength, 
-         seed: seed === "" ? null : parseInt(seed),
+        convergenceMult, 
+        opinionType, 
+        stubbornFrac, 
+        bias, 
+        biasStrength, 
+        nBroadcasters,
+        broadcastOpinion,
+        seed: seed === "" ? null : parseInt(seed),
       }),
     });
     setSimState(await res.json());
-  }, [gridSize, convinceRange, convergenceMult, opinionType, stubbornFrac, bias, biasStrength, seed]);
+  }, [gridSize, convinceRange, convergenceMult, opinionType, stubbornFrac, bias, biasStrength, nBroadcasters, broadcastOpinion, seed]);
 
   // ── Step: advance the model one tick, update grid ────────────────────────
   const doStep = useCallback(async () => {
@@ -166,6 +171,18 @@ function App() {
       type: "numberinput",
       value: varianceThreshold, onChange: setVarianceThreshold,
       placeholder: "e.g. 0.001",
+    },
+    {
+      key: "nBroadcasters", label: "Number of Broadcasters",
+      type: "slider",
+      value: nBroadcasters, onChange: setNBroadcasters,
+      min: 0, max: 10, step: 1,
+    },
+    {
+      key: "broadcastOpinion", label: "Broadcast Opinion (0=red, 1=blue)",
+      type: "slider",
+      value: broadcastOpinion, onChange: setBroadcastOpinion,
+      min: 0.0, max: 1.0, step: 0.05,
     },
   ];
 
