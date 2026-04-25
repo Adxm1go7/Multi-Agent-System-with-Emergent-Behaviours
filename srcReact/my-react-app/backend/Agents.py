@@ -6,17 +6,22 @@ class OpinionAgent(FixedAgent):
 
         super().__init__(model)
 
+        #Grid coordinate
         self.cell = cell
 
         #Value between 0.0 - 1.0, reflects opinion
         self.opinion = opinion
-        #Max difference when opinion converges
+
+        #Max difference between agents for opinion to converge
         self.convince_range = convince_range
+
         #When convinced, how much cells converge
         self.converge_mult = converge_mult
-
+        
+        #Agents opinion wont change if True
         self.is_stubborn = is_stubborn
 
+        #Broadcasters always reflect their opinions but never converge
         self.is_broadcaster = False
 
 
@@ -63,7 +68,6 @@ class BroadcastAgent(OpinionAgent):
     """
     A stubborn broadcaster that pushes its opinion to all neighbours
     every step. Never updates its own opinion.
-    Models media influence or opinion leaders.
     """
 
     def __init__(self, model, cell, opinion, convince_range, converge_mult):
@@ -72,20 +76,18 @@ class BroadcastAgent(OpinionAgent):
         self.is_broadcaster = True
 
     def broadcast(self):
-        """Push opinion to all neighbours within range."""
+        # Push opinion to all neighbours within range
         neighborhood = self.cell.get_neighborhood(include_center=False)
 
         for cell in neighborhood.cells:
             if cell.agents:
                 neighbour = cell.agents[0]
-                # Broadcasters bypass convince_range — always influence
+                # Broadcasters bypass convince_range
                 if not neighbour.is_stubborn and not neighbour.is_broadcaster:
                     neighbour.opinion = neighbour.opinion + self.converge_mult * (self.opinion - neighbour.opinion)
 
-                    # Snap if discrete mode
                     if self.model.scenario.opinion_type != "continuous":
                         neighbour.opinion = neighbour.snap_to_discrete(neighbour.opinion)
 
     def step(self):
-        # Broadcast to all neighbours instead of talking to one
         self.broadcast()

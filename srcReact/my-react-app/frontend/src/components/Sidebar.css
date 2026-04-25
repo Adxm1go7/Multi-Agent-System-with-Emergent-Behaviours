@@ -1,7 +1,7 @@
-/* Sidebar.css */
 .sidebar {
   width: 300px;
   min-width: 300px;
+  height: 100vh;
   background: #f5f5f5;
   border-right: 1px solid #ddd;
   overflow-y: auto;
@@ -22,7 +22,6 @@
   border-bottom: 1px solid #ddd;
 }
 
-/* Individual parameter row */
 .param {
   display: grid;
   grid-template-columns: 1fr auto auto; /* label | slider | value */
@@ -64,7 +63,6 @@
   background: white;
 }
 
-/* Buttons */
 .btn-row {
   display: flex;
   gap: 8px;
@@ -88,7 +86,6 @@
 
 .btn:hover { filter: brightness(0.92); }
 
-/* Info section */
 .info-row {
   display: flex;
   justify-content: space-between;

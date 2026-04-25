@@ -1,9 +1,4 @@
-// PageTabs.jsx
-// ── Tab bar matching Solara's "PAGE 0 / PAGE 1" tabs ──────────────────────
-// Props:
-//   pages       (array of {id, label}) — tab definitions
-//   activePage  (number)               — currently selected page id
-//   onPageChange (function)            — called with the new page id
+/*May not be used*/
 
 import "./PageTabs.css";
 

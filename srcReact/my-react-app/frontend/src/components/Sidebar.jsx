@@ -1,32 +1,3 @@
-// Sidebar.jsx
-// ── Left control panel matching Solara's sidebar ───────────────────────────
-// Props:
-//   params      (array)    — list of parameter configs (see shape below)
-//   onReset     (function) — called when Reset is clicked
-//   onStep      (function) — called when Step is clicked
-//   onPlay      (function) — called when Play/Pause is clicked
-//   isPlaying   (bool)     — whether the sim is currently running
-//   info        (object)   — key/value pairs shown in the Information section
-//   playInterval (number)  — current play interval ms value (controlled)
-//   onPlayIntervalChange (function) — called with new play interval value
-//
-// Each param in `params` has this shape:
-// {
-//   key: string,           — matches the state key in App.jsx
-//   label: string,         — display label
-//   type: "slider"         — continuous slider
-//       | "select"         — dropdown
-//       | "checkbox",      — toggle
-//   value: any,            — current value (controlled from App.jsx)
-//   onChange: function,    — called with new value
-//   // slider only:
-//   min: number,
-//   max: number,
-//   step: number,
-//   // select only:
-//   options: string[],
-// }
-
 import "./Sidebar.css";
 
 function SliderParam({ label, value, min, max, step, onChange }) {
@@ -55,7 +26,7 @@ function NumberInputParam({ label, value, onChange, placeholder }) {
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
-        className="param-select"   // reuse your existing input styling
+        className="param-select" 
       />
     </div>
   );
@@ -107,11 +78,9 @@ export default function Sidebar({
   return (
     <aside className="sidebar">
 
-      {/* ── Controls section ───────────────────────────────── */}
       <section className="sidebar-section">
         <h3 className="sidebar-heading">Controls</h3>
 
-        {/* Play interval slider — mirrors Solara's built-in control */}
         <SliderParam
           label="Play Interval (ms)"
           value={playInterval}
@@ -119,18 +88,6 @@ export default function Sidebar({
           onChange={onPlayIntervalChange}
         />
 
-        <div className="param">
-          <label className="param-label">Random Seed (blank = random)</label>
-          <input
-            type="number"
-            value={seed}
-            onChange={e => onSeedChange(e.target.value)}
-            placeholder="e.g. 42"
-            className="param-select"   // reuse the same styling as your dropdowns
-          />
-        </div>
-
-        {/* Action buttons */}
         <div className="btn-row">
           <button className="btn btn-reset" onClick={onReset}>RESET</button>
           <button className="btn btn-play" onClick={onPlay}>
@@ -140,7 +97,6 @@ export default function Sidebar({
         </div>
       </section>
 
-      {/* ── Model Parameters section ────────────────────────── */}
       <section className="sidebar-section">
         <h3 className="sidebar-heading">Model Parameters</h3>
         {params.map(p => {
@@ -162,9 +118,18 @@ export default function Sidebar({
           );
           return null;
         })}
+        <div className="param">
+          <label className="param-label">Random Seed (blank = random)</label>
+          <input
+            type="number"
+            value={seed}
+            onChange={e => onSeedChange(e.target.value)}
+            placeholder="e.g. 42"
+            className="param-select" 
+          />
+        </div>
       </section>
 
-      {/* ── Information section ─────────────────────────────── */}
       <section className="sidebar-section">
         <h3 className="sidebar-heading">Information</h3>
         {Object.entries(info).map(([key, val]) => (

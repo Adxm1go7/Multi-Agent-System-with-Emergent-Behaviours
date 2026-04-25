@@ -49,7 +49,6 @@ class OpinionDynamicsModel(Model):
 
         model_reporters = {
             "Opinions": lambda m: [a.opinion for a in m.agents],
-
             "Opinion_variance": lambda m: float(np.var([a.opinion for a in m.agents])),
         }
 
@@ -76,7 +75,7 @@ class OpinionDynamicsModel(Model):
             if len(empty_cells) >= scenario.n_broadcasters:
                 broadcast_cells = self.random.sample(empty_cells, k=scenario.n_broadcasters)
             else:
-                # Not enough empty cells — reduce to available
+                # Not enough empty cells, reduce to available
                 broadcast_cells = empty_cells
 
             BroadcastAgent.create_agents(
@@ -103,26 +102,13 @@ class OpinionDynamicsModel(Model):
             return []
         return df["Opinion_variance"].tolist()
 
-    """ 
-    def generate_opinion(self, opinion_type):
-        if opinion_type == "continuous":
-            return self.random.uniform(0.0, 1.0)
-        elif opinion_type == "binary":
-            return self.random.choice([0.0, 1.0])
-        elif opinion_type == "ternary":
-            return self.random.choice([0.0, 0.5, 1.0])
-        elif opinion_type == "quadrary":
-            return self.random.choice([0.0, 0.33, 0.67, 1.0])
-    """       
-
     def generate_opinion(self, opinion_type, bias, bias_strength):
         if bias_strength == 0.0:
-            # No bias — purely uniform random as before
             raw = self.random.uniform(0.0, 1.0)
         else:
             # Beta distribution centred on bias
             # Higher bias_strength = tighter cluster around bias value
-            strength = 1 + bias_strength * 19  # scale 0-1 → 1-20
+            strength = 1 + bias_strength * 19  # scale 0-1 -> 1-20
             alpha = strength * bias + 1e-6
             beta  = strength * (1 - bias) + 1e-6
             raw = np.random.beta(alpha, beta)
@@ -142,5 +128,4 @@ class OpinionDynamicsModel(Model):
     def step(self):
         self.agents.shuffle_do("step")
         self.datacollector.collect(self)
-        print(self.scenario.converge_mult)
 

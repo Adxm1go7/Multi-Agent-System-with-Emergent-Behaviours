@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-// Opinion [0,1] → red to blue
+// Opinion [0,1] -> red to blue
 function opinionToColor(v) {
   const r = Math.round(255 * (1 - v));
   const g = Math.round(0);
@@ -41,7 +41,7 @@ export default function SimGrid({ agents = [], gridLength = 10, size = 500 }) {
           cellSize - gap * 2,
         );
 
-        // Draw broadcaster agents with a bright white ring
+        // Draw broadcaster agents with a Diamond in centre
         if (agent?.is_broadcaster) {
           const cx = col * cellSize + cellSize / 2;
           const cy = row * cellSize + cellSize / 2;

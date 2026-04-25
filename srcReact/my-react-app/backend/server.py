@@ -18,7 +18,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Single global model instance
+#Global
 model = OpinionDynamicsModel()
 
 def serialize_grid(model):
@@ -55,7 +55,7 @@ class ResetParams(BaseModel):
     nBroadcasters:    int   = 0
     broadcastOpinion: float = 1.0
 
-    seed:            Optional[int] = None  # None = random, int = reproducible
+    seed:            Optional[int] = None  # None = random, int = set, hence reproducible 
 
 
 

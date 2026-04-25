@@ -5,10 +5,13 @@ import Navbar from "./components/Navbar"
 import Sidebar from "./components/Sidebar"
 import SimGrid from "./components/SimGrid"
 
+import VarianceChart  from "./components/VarianceChart";
+import HistogramChart from "./components/HistogramChart";
+
 const API = "http://localhost:8000";
 
 function App() {
-  // Grid state — comes back from the backend on every step/reset
+  // Grid state comes back from the backend on every step/reset
   const [simState, setSimState] = useState({ agents: [], grid_length: 10, step: 0 })
 
   const [gridSize, setGridSize]               = useState(10);
@@ -70,7 +73,7 @@ function App() {
   };
 
   const doReset = useCallback(async () => {
-    setIsPlaying(false);  // ← stop playing on reset
+    setIsPlaying(false);  // stop playing on reset
     const res = await fetch(`${API}/reset`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -90,31 +93,30 @@ function App() {
     setSimState(await res.json());
   }, [gridSize, convinceRange, convergenceMult, opinionType, stubbornFrac, bias, biasStrength, nBroadcasters, broadcastOpinion, seed]);
 
-  // ── Step: advance the model one tick, update grid ────────────────────────
+
   const doStep = useCallback(async () => {
     const res = await fetch(`${API}/step`, { method: "POST" });
     setSimState(await res.json());
   }, []);
 
-  // Toggle play/pause
+
   const doPlay = useCallback(() => {
     setIsPlaying(p => !p);
   }, []);
 
   const intervalRef = useRef(null);
 
-  // Whenever isPlaying or playInterval changes, start/stop the interval
+ 
   useEffect(() => {
     if (isPlaying) {
       intervalRef.current = setInterval(doStep, playInterval);
     } else {
       clearInterval(intervalRef.current);
     }
-    // Cleanup on unmount or before next effect runs
     return () => clearInterval(intervalRef.current);
   }, [isPlaying, doStep, playInterval]);
 
-  // Init on mount
+
   useEffect(() => { doReset(); }, []);
 
   const params = [
@@ -203,12 +205,25 @@ function App() {
           onSeedChange={setSeed}
         />
       <main className="app-main">
-        <SimGrid
-          agents={simState.agents}
-          gridLength={simState.grid_length}
-          size={500}   // fixed canvas pixel size — no DPI issues
-        />
-        <p>Step: {simState.step}</p>
+        <div style={{ display: "flex", gap: "16px", padding: "16px" }}>
+
+          <div>
+            <SimGrid
+              agents={simState?.agents ?? []}
+              gridLength={simState?.grid_length ?? 10}
+              size={700}
+            />
+            <p style={{ fontSize: "12px", color: "#666", marginTop: "6px" }}>
+              Step: {simState?.step ?? 0}
+            </p>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            <VarianceChart  history={simState?.variance_history ?? []}/>
+            <HistogramChart opinions={simState?.agents?.map(a => a.opinion) ?? []} />
+          </div>
+
+        </div>
       </main>
 
       </div>
