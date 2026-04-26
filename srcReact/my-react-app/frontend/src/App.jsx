@@ -136,7 +136,7 @@ function App() {
       options: ["single", "all_hk", "all_weighted"],
     },
     {
-      key: "convinceRange", label: "Max Difference to Converge",
+      key: "convinceRange", label: "Confidence Threshold",
       type: "slider",
       value: convinceRange, onChange: setConvinceRange,
       min: 0.05, max: 1.0, step: 0.05,
