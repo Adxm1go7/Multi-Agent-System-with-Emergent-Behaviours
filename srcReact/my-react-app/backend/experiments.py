@@ -13,6 +13,7 @@ from Model import OpinionDynamicsModel, OpinionScenario
 # The script runs every combination (cartesian product)
 
 SWEEP = {
+    "interaction_mode": ["single", "all_hk", "all_weighted"],
     "convince_range":   [0.1, 0.2, 0.3, 0.5, 1.0],
     "converge_mult":    [0.1, 0.3, 0.5],
     "grid_length":      [10],

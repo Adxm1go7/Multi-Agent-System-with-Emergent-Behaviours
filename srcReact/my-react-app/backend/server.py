@@ -57,6 +57,8 @@ class ResetParams(BaseModel):
 
     seed:            Optional[int] = None  # None = random, int = set, hence reproducible 
 
+    interactionMode: str = "single"
+
 
 
 @app.post("/reset")
@@ -75,6 +77,8 @@ def reset(params: ResetParams):
         broadcast_opinion = params.broadcastOpinion,
 
         seed = params.seed if params.seed is not None else int(np.random.randint(0, 99999)),
+
+        interaction_mode = params.interactionMode,
     )
     model = OpinionDynamicsModel(scenario=scenario)
     return serialize_grid(model)

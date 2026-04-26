@@ -2,7 +2,7 @@ from mesa.discrete_space import CellAgent, FixedAgent
 
 class OpinionAgent(FixedAgent):
 
-    def __init__(self, model, cell, opinion, convince_range, converge_mult, is_stubborn):
+    def __init__(self, model, cell, opinion, convince_range, converge_mult, is_stubborn, interaction_mode):
 
         super().__init__(model)
 
@@ -24,6 +24,8 @@ class OpinionAgent(FixedAgent):
         #Broadcasters always reflect their opinions but never converge
         self.is_broadcaster = False
 
+        self.interaction_mode = interaction_mode
+
 
     def talkToOneNeighbour(self): 
         cell = self.cell.get_neighborhood(include_center=False).select_random_cell()
@@ -39,6 +41,76 @@ class OpinionAgent(FixedAgent):
                     else:
                         new_opinion = self.opinion + self.converge_mult * (neighborAgent.opinion - self.opinion)
                         self.opinion = self.snap_to_discrete(new_opinion)
+
+    def talkToAllNeighboursHK(self):
+        """
+        Hegselmann-Krause rule.
+        Agent averages opinions of ALL neighbours within convince_range equally.
+        No weighting.
+        """
+        if self.is_stubborn:
+            return
+
+        eligible = []
+        for cell in self.cell.get_neighborhood(include_center=False).cells:
+            if cell.agents:
+                neighbour = cell.agents[0]
+                if abs(self.opinion - neighbour.opinion) <= self.convince_range:
+                    eligible.append(neighbour)
+
+        if not eligible:
+            return
+
+        # Simple unweighted average of all in-range neighbours
+        avg = sum(n.opinion for n in eligible) / len(eligible)
+        new_opinion = self.opinion + self.converge_mult * (avg - self.opinion)
+
+        if self.model.scenario.opinion_type != "continuous":
+            new_opinion = self.snap_to_discrete(new_opinion)
+
+        self.opinion = new_opinion
+
+
+    def talkToAllNeighboursWeighted(self):
+        """
+        Weighted neighbour averaging (My idea).
+        Neighbours with closer opinions have more influence.
+        Agents outside convince_range are still ignored entirely (HK boundary).
+        Weight = 1 / (distance + epsilon) so identical opinions have highest weight.
+        """
+        if self.is_stubborn:
+            return
+
+        eligible   = []
+        weights    = []
+
+        for cell in self.cell.get_neighborhood(include_center=False).cells:
+            if cell.agents:
+                neighbour = cell.agents[0]
+                diff = abs(self.opinion - neighbour.opinion)
+                if diff <= self.convince_range:
+                    eligible.append(neighbour)
+                    # Closer opinions = higher weight
+                    weights.append(1.0 / (diff + 1e-6)) # Prevent / 0 by adding really small number
+
+        if not eligible:
+            return
+
+        # Normalise so weights sum to 1
+        total      = sum(weights)
+        normalised = [w / total for w in weights]
+
+        # Weighted average
+        weighted_avg = sum(n.opinion * w for n, w in zip(eligible, normalised))
+        new_opinion  = self.opinion + self.converge_mult * (weighted_avg - self.opinion)
+
+        if self.model.scenario.opinion_type != "continuous":
+            new_opinion = self.snap_to_discrete(new_opinion)
+
+        self.opinion = new_opinion
+
+
+
         
     def snap_to_discrete(self, value):
         valid = {
@@ -59,7 +131,14 @@ class OpinionAgent(FixedAgent):
 
     
     def step(self):
-        self.talkToOneNeighbour()
+        mode = self.interaction_mode
+
+        if mode == "single":
+            self.talkToOneNeighbour()
+        elif mode == "all_hk":
+            self.talkToAllNeighboursHK()
+        elif mode == "all_weighted":
+            self.talkToAllNeighboursWeighted()
 
 
 

@@ -32,6 +32,8 @@ function App() {
   const [maxSteps, setMaxSteps]             = useState("");      // blank = no limit
   const [varianceThreshold, setVarianceThreshold] = useState(""); // blank = no limit
 
+  const [interactionMode, setInteractionMode] = useState("single");
+
   // Check stopping conditions after every step
   useEffect(() => {
     if (!simState || !isPlaying) return;
@@ -88,10 +90,11 @@ function App() {
         nBroadcasters,
         broadcastOpinion,
         seed: seed === "" ? null : parseInt(seed),
+        interactionMode
       }),
     });
     setSimState(await res.json());
-  }, [gridSize, convinceRange, convergenceMult, opinionType, stubbornFrac, bias, biasStrength, nBroadcasters, broadcastOpinion, seed]);
+  }, [gridSize, convinceRange, convergenceMult, opinionType, stubbornFrac, bias, biasStrength, nBroadcasters, broadcastOpinion, seed, interactionMode]);
 
 
   const doStep = useCallback(async () => {
@@ -125,6 +128,12 @@ function App() {
       type: "select",
       value: gridSize, onChange: setGridSize,
       options: [10, 20, 30, 40, 50, 60],
+    },
+    {
+      key: "interactionMode", label: "Interaction Mode",
+      type: "select",
+      value: interactionMode, onChange: setInteractionMode,
+      options: ["single", "all_hk", "all_weighted"],
     },
     {
       key: "convinceRange", label: "Max Difference to Converge",

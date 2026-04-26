@@ -26,6 +26,8 @@ class OpinionScenario(Scenario):
 
     seed: int = 42
 
+    interaction_mode: str = "single"
+
 
 class OpinionDynamicsModel(Model):
     description = "A model for simulating opinion convergence"
@@ -64,7 +66,8 @@ class OpinionDynamicsModel(Model):
             scenario.bias_strength) for _ in range(self.n_agents)],
             scenario.convince_range,
             scenario.converge_mult,
-            self.assign_stubborn(self.n_agents, scenario.stubborn_fraction)
+            self.assign_stubborn(self.n_agents, scenario.stubborn_fraction),
+            interaction_mode=scenario.interaction_mode,
         )
 
         # Place broadcasters in remaining empty cells

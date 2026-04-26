@@ -2,13 +2,13 @@ Abstract
 
 Table of Contents
 
-Intro:
+Introduction:
 	Background & Motivation
 	Problem definition
 	Aims, objectives
 	Scope, limitations
-	Dissertation structure
 	Introduction to problem ?
+	Dissertation structure
 
 Literature Review:
 	Agent based modelling
@@ -28,16 +28,10 @@ Design & Methodology:
 Implementation:
 	Technology, software, hardware used
 
-	Base Case:
-		Implementation of Agent, model, visualisation
-		Limitations
-	Extension1:
-		Implementation changes of Agent, model, visualisation
-		Limitations
-	Extension2:
-		Implementation changes of Agent, model, visualisation
-		Limitations
-	...
+	Implementation of Agent, model, visualisation
+	+ all features
+	Limitations
+
 
 Results & Analysis:
 	Baseline behaviour
