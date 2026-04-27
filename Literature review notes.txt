@@ -1,0 +1,143 @@
+Extended Dk notes:
+
+Bounded confidence - agents converge if within range
+Both agents converge 
+Opinions distributed uniformly
+
+When confidence tested against confidence bound, both increase
+
+Mu = 1 or 1/2 and same formula i use: if difference < r then new opinion = old opinion + difference * Mu
+
+Different r values (confidence bounds) < 0.5 leads to dual 2 consensus
+
+n = 10 (agents)
+
+
+
+Experimenting with 1000 samples for each rmax{1/20, 2/20, 3/20 ...}
+
+
+
+DK notes:
+
+
+
+N agents Each agent (i) with continuous opinions xi
+They both readjust their opinion when the difference is below a threshold d
+
+Mu is between 0 and 0.5 and uses same formula i use
+
+x = x + Mu * (differnce in opinion)
+
+At each time step each pair readjusts their opinions (not location based)
+
+Findings:
+Mu and N only influence convergence time whilst d influences the number of peaks. 
+
+
+
+Now they do the study based on locality (only neighbouring pairs)
+using only 4 neighbours (Von neumann grid)
+
+Lone extremists for low d values and small clusters
+
+Lower d values = more clustering
+
+
+HK:
+
+When does opinion formation within an interacting group lead to consensus,
+polarization or fragmentation?
+
+Average of neighbouring opinions taken
+
+x_i(t+1) = a_i1 x_1 (t) + a_i2 x_2 (t) + ... + a_in x_n (t)
+
+Potential Extension -> weights are time dependant "harden over time"
+
+HK use counded confidence -> takes only agents opinions if < bounded confidence value
+
+Discuss that its pretty similar to DW but small differences
+
+No spatial constraint
+
+Findings / results:
+Confidence bounds are same amongst all agents:
+
+
+0.01 -> fragmentation (split opinions)
+
+0.15 -> polarisation (split into 2 sides)
+
+0.25 -> consensus
+
+Confidence bound assymetric (include briefly) E.g.
+Hegselmann & Krause (2002) also explore an asymmetric variant in which agents maintain separate left and right confidence bounds, allowing for directional bias in opinion openness. This project adopts the simpler symmetric formulation."
+
+The consensus is pushed towards the opinion side with the lower bounded confidence
+
+
+
+
+Spatial study notes:
+
+2D torus grid 101 x 101
+Opinion + strength of opinion
+Opinion spectrum is A = {+-1, +-2, ... +-L}
+
+Sign = opinion and value = strength of opinion
+
+The strength of an individual’s opinion can affect the likelihood that that individual will affect others
+
+Each agent interact with one other, and only one agent can converge in this interaction
+
+Influence = strength of an agents opinion can affect the likelihood that other will be affected can be quadratic, linear, uniform, co-linear, co-quadratic
+
+In an interaction with amplificationthe opinion of the focal individual becomes more entrenched, i.e., they adopt a more extreme attitude. In
+an interaction without amplification, depicted on the right in (b)), the focal individual changes their attitude
+towards the other individual’s attitude.
+
+
+Amplification. When a “focal” individual looks to update its attitude via an interaction with another appropriately
+chosen individual, the result depends on whether the two opinions are on the same side of the attitude spectrum. If
+the attitudes are on opposite sides of the spectrum (i.e., the opinions are opposite), the focal individual will change
+its attitude by moving one step toward the other side
+
+Relocation. Some fraction rel ∈ [0, 1] of the population may be chosen to relocate by exchanging positions with other
+relocating individuals
+
+
+Local and global interactions. When a focal individual interacts locally, it chooses one of its 8 nearest neighbors
+at random with probabilities weighted by the influences of these neighbors.
+
+When a focal individual interacts globally, it chooses one of the other individuals in the population at random, without
+regard to influence
+
+
+Fully Spatial Model: All individuals interact locally and there is no relocation or telephoning.
+
+Relocation Model: All individuals interact locally but, prior to the interactions in each time step, a fraction rel ∈
+
+
+Telephoning Model: A fraction loc ∈ [0, 1] of the population is randomly selected at each step. Each individual
+in this subset interacts with a local neighbor. The remaining fraction of the population, tel = 1 − loc, chooses
+interaction partners globally.
+
+
+
+Analysis:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

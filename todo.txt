@@ -1,5 +1,19 @@
-1. Add core parameters: 
-    - Model size + turn App into class
-    - Difference in values for Convergence to happen
-    - Colour Steps (Maybe add option for just 2 states)
-    - value change when Convergence happens
+2.4.3 The voter model Clifford & Sudbury (1973), (binary)
+
+
+2.5 Spatial Opinion dynamics
+Grid based vs random network vs scale-free
+Why spatial constraints matter - justify design choice
+
+Castellano et al. 2009
+
+
+2.6 Heterogeneous Agent models
+2.6.1 Stubborn Agents
+2.6.2 External influence / broadcasters
+
+
+2.7 Existing simulation Tools
+Review existing ABM tools and simulator
+
+2.8 Summary and research gap taht I fill

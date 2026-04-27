@@ -149,9 +149,10 @@ class BroadcastAgent(OpinionAgent):
     every step. Never updates its own opinion.
     """
 
-    def __init__(self, model, cell, opinion, convince_range, converge_mult):
+    def __init__(self, model, cell, opinion, convince_range, converge_mult, interaction_mode):
         # is_stubborn=True so it never updates its own opinion
-        super().__init__(model, cell, opinion, convince_range, converge_mult, is_stubborn=True)
+        is_stubborn = True
+        super().__init__(model, cell, opinion, convince_range, converge_mult, is_stubborn, interaction_mode)
         self.is_broadcaster = True
 
     def broadcast(self):

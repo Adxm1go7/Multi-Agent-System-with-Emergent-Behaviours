@@ -88,6 +88,7 @@ class OpinionDynamicsModel(Model):
                 [scenario.broadcast_opinion] * len(broadcast_cells),
                 scenario.convince_range,
                 scenario.converge_mult,
+                scenario.interaction_mode
             )
 
         self.datacollector.collect(self)
