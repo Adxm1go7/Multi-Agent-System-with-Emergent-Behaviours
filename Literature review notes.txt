@@ -127,6 +127,156 @@ interaction partners globally.
 
 Analysis:
 
+I. CONCLUSION
+We considered several versions of our general entrenchment model of opinion dynamics: the fully spatial model,
+the telephoning model, and the relocation model. The behavior of the telephoning and relocation models diverge
+for a small amount of mixing and come together as mixing increases, where sufficiently high levels of mixing can be
+17
+approximated by an ODE. Real populations are somewhere in between, leaning towards less mixing: sometimes people
+move to new communities, sometimes people have interactions outside their normal contacts, but most interactions
+are with the same people from a relatively small group.
+We compared the effects of these two modes of mixing on the dynamics of opinion formation. In previous work, we
+analyzed the effects of opinion amplification in a population where individuals interacted only locally, and we found
+that amplification produces clusters of opinion and polarization towards more extreme opinions resulting in long-term
+deadlock. There we compared our model to other existing models of opinion dynamics, including bounded confidence
+models and models that explore mechanisms that produce polarization [16, 21, 22, 24, 28, 29]. Our findings show that
+the effect of polarization by amplification, which leads to deadlock or at least increased time to consensus, is reversed
+in a well-mixed system; an increase in amplification decreases the time to consensus. The transition from deadlock
+to consensus as we move from a purely local to mixed population depends on the type of mixing.
+Our findings suggest that mixing by relocation will reverse deadlock faster than mixing by telephoning. Where this
+reversal happens and how much faster it occurs depends on the level of amplification. As amplification probability
+approaches zero, the difference between relocation and telephoning is negligible. However, as amplification is increased,
+even just a small amount, the difference between relocation and telephoning becomes significant. The combination of
+relocation and amplification dramatically decreases the time to consensus, quickly approaching the behavior of the
+ODE system. On the other hand, it takes much more telephoning (in combination with amplification) to approach
+the same consensus time behavior.
+
+
+
+
+Stubborn Agents: Binary Opinion Dynamics with Stubborn Agents
+
+Binary opinion choice (2 options)
+
+Modeled by a graph with set of fixed neighbours. Randomly chosen agent communicates with one neighbour and adopts their opinion
+
+Stubborn agents dont change their opinion
+
+Study how to optimally influence opinoin dynamics
+
+
+They study optimal stubborn agent placement (possible future extension)
+
+
+In this model, stubborn agents with opposing views prevent consensus in the soci-ety. However, under mild connectivity assumptions, we show that agent state vectorconverges in distribution.
+
+Our analysis relies on an extension of the dual approach for the classical voter model,which involves coalescing random walks with absorbing states given by the stubbornagents.
+
+
+
+
+External Influence (not used):
+
+In social phenomena the basic constituents are humans, i.e., complex
+individuals who interact with a limited number of peers, usually negligible
+compared to the total number of people in the system. In spite of that,
+human societies are characterized by stunning global regularities [4]. We
+find transitions from disorder to order, like the spontaneous formation of a
+common language/culture or the emergence of consensus about a specific
+issue and there are examples of scaling and universality as well.
+
+In the following, we provide a review of opinion dynamics models by
+classifying them according to the presence or not of external information,
+that is a mechanism mimicking a sort of mass media broadcast
+
+Continuous opinions - Every T
+generations, the entire population interacts with the information
+ the opinion is
+updated only if the bounded confidence condition is met
+
+a Deffuant-like model in two dimensions, with two conflicting opinions (x
+1
+i
+, x
+2
+i ), was studied under the effect of external influence
+from media and experts, on a scale-free social network
+Results showed that when
+the media message is false, peer interaction can help the population escape the message, only if the media does not reach more than 60% of the
+individuals.
+
+External information
+(mass-media) is included as a static individual that all agents can interact with, after a peer interaction, with probability pI
+
+The system was
+shown to form one or more clusters depending on pI , initial condition and
+type of information. Extreme mass-media messages and large exposure
+to external information proved to have a reduced success in the population, while mild messages and low exposure were more easily adopted by
+a large number of individuals. 
+
+
+Full agreement with the information was
+obtained either for a very mild message or for a very low exposure of a
+non-extreme message to a compact initial configuration. The model was
+further developed in [176], where multiple media sources were analysed
+and shown to lead to more realistic behaviour, i.e., stable non-polarised
+32
+clusters or full agreement for external information which is not extremely
+mild.
+
+
+
+
+
+
+New external influence notes:
+
+Generalised voter model, N voters influenced by two opposing news sources whose effect is to promote polarisation. As inluence of news source is increased, mean time to consensus scales non-universallly as N^(alpha).
+
+Alpha = influence of news sources, increases without bound as news sources become more influenctial. Time to reach polarisation is generaelly short
+
+Context signifying importance of external influence:
+In recent decades,
+this polarization has increased to the point where, for
+example, parents affiliated with one US political party
+are loathe to have their children wed someone affiliated
+with the other major party 
+
+In our model, each individual has two possible opinion states, denoted as + and −. Individual opinions
+are updated according to voter model dynamics: a randomly selected voter adopts the opinion of a randomly
+selected neighbor
+
+We account for the different propensities of news
+media and neighboring voters to influence a given voter
+as follows: for a voter linked to one news source and k
+other voters, the news source is picked with probability
+p/R and a neighboring voter is picked with probability
+(1 − p)k/R, where R = p + k(1 − p) is the total rate of
+picking any neighbor
+
+Once an interaction partner is
+selected, the voter adopts the opinion of this partner
+
+Results:
+Consensus time grows with N with an exponent alpha
+
+competing and well-connected news sources hinder the
+approach to consensus.
+
+Polarisation time scales as N / Alpha, given voters are well connected to competing news sources
+
+To summarize, the presence of two opposing news
+sources promotes political polarization in the voter
+model. The news sources give rise to an effective logarithmic potential, which leads to an anomalously long
+consensus time and a short time to reach a politically
+polarized state. Our modeling has the advantages that
+it is analytically tractable and has predictive power to
+elucidate the anomalous scaling properties of these two
+time scales. The opinion dynamics on the more realistic two-clique graph mirror our analytical results for the complete graph system
+
+
+
+
 
 
 

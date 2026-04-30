@@ -157,7 +157,7 @@ function App() {
       key: "stubbornFrac", label: "Stubborn Agent Fraction",
       type: "slider",
       value: stubbornFrac, onChange: setStubbornFrac,
-      min: 0.0, max: 0.5, step: 0.05,
+      min: 0.0, max: 0.5, step: 0.01,
     },
     {
       key: "bias", label: "Opinion Bias (0=red, 1=blue)",
