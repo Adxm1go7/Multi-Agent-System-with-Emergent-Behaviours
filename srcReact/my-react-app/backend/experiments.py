@@ -13,23 +13,23 @@ from Model import OpinionDynamicsModel, OpinionScenario
 # The script runs every combination (cartesian product)
 
 SWEEP = {
-    "interaction_mode": ["single", "all_hk", "all_weighted"],
-    "convince_range":   [0.1, 0.2, 0.3, 0.5, 1.0],
-    "converge_mult":    [0.1, 0.3, 0.5],
-    "grid_length":      [10],
-    "opinion_type":     ["continuous", "binary", "ternary"],
-    "stubborn_fraction":[0.0, 0.1, 0.2],
+    "interaction_mode": ["single"],
+    "confidence_threshold":   [0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5, 1.0], # Confidence Threshold
+    "converge_mult":    [0.1, 0.2, 0.3],
+    "grid_length":      [10, 20],
+    "opinion_type":     ["continuous"],
+    "stubborn_fraction":[0.0],
 }
 
 # Fixed parameters (these dont vary across sweeps)
 FIXED = {
     "bias":             0.5,
     "bias_strength":    0.0,
-    "n_broadcasters":   0,
+    "n_broadcasters":   2,
     "broadcast_opinion":1.0,
 }
 
-N_REPLICATIONS = 5    # how many runs per parameter combination
+N_REPLICATIONS = 10    # how many runs per parameter combination
 MAX_STEPS      = 500   # max steps per run before stopping
 CONVERGENCE_THRESHOLD = 0.001  # variance below this = converged
 OUTPUT_FILE    = "results.csv"
@@ -42,7 +42,7 @@ def run_simulation(params, seed):
     """
     scenario = OpinionScenario(
         grid_length        = params["grid_length"],
-        convince_range     = params["convince_range"],
+        convince_range     = params["confidence_threshold"],
         converge_mult      = params["converge_mult"],
         opinion_type       = params["opinion_type"],
         stubborn_fraction  = params["stubborn_fraction"],
@@ -92,11 +92,6 @@ def run_simulation(params, seed):
 
 
 def count_clusters(opinions, threshold=0.05):
-    """
-    Count distinct opinion clusters.
-    Two opinions are in the same cluster if they are within
-    threshold of each other.
-    """
     if not opinions:
         return 0
 
@@ -155,7 +150,7 @@ def run_sweep():
                 remaining = (total_runs - completed) * per_run
                 print(
                     f"  [{completed}/{total_runs}] "
-                    f"ε={params['convince_range']} "
+                    f"ε={params['confidence_threshold']} "
                     f"μ={params['converge_mult']} "
                     f"grid={params['grid_length']} "
                     f"type={params['opinion_type']} "

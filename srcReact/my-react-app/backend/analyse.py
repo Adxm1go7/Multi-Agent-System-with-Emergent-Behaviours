@@ -1,4 +1,5 @@
-# analyse.py
+# TO RUN (/from backend):
+# python analyse.py
 # Run after experiments.py to get summary statistics and plots.
 # pip install pandas matplotlib seaborn
 
@@ -14,10 +15,10 @@ print(f"Converged:     {df['converged'].sum()} ({df['converged'].mean()*100:.1f}
 print(f"Mean variance: {df['final_variance'].mean():.4f}")
 print()
 
-# ── Plot 1: Convergence step vs epsilon, grouped by opinion type ───────────
+#Plot 1: Convergence step vs epsilon, grouped by opinion type
 fig, ax = plt.subplots(figsize=(10, 5))
 for opinion_type, group in df.groupby("opinion_type"):
-    means = group.groupby("convince_range")["convergence_step"].mean()
+    means = group.groupby("confidence_threshold")["convergence_step"].mean()
     ax.plot(means.index, means.values, marker="o", label=opinion_type)
 ax.set_xlabel("Confidence Threshold (ε)")
 ax.set_ylabel("Mean Convergence Step")
@@ -27,11 +28,11 @@ plt.tight_layout()
 plt.savefig("convergence_vs_epsilon.png", dpi=150)
 print("Saved convergence_vs_epsilon.png")
 
-# ── Plot 2: Heatmap of final variance (epsilon x converge_mult) ───────────
+#Plot 2: Heatmap of final variance (epsilon x converge_mult)
 pivot = df[df["opinion_type"] == "continuous"].pivot_table(
     values="final_variance",
     index="converge_mult",
-    columns="convince_range",
+    columns="confidence_threshold",
     aggfunc="mean",
 )
 fig, ax = plt.subplots(figsize=(8, 5))
@@ -43,10 +44,10 @@ plt.tight_layout()
 plt.savefig("variance_heatmap.png", dpi=150)
 print("Saved variance_heatmap.png")
 
-# ── Plot 3: Effect of stubborn agents on convergence ──────────────────────
+#Plot 3: Effect of stubborn agents on convergence
 fig, ax = plt.subplots(figsize=(8, 5))
 for stub_frac, group in df.groupby("stubborn_fraction"):
-    means = group.groupby("convince_range")["convergence_step"].mean()
+    means = group.groupby("confidence_threshold")["convergence_step"].mean()
     ax.plot(means.index, means.values, marker="o", label=f"stubborn={stub_frac}")
 ax.set_xlabel("Confidence Threshold (ε)")
 ax.set_ylabel("Mean Convergence Step")
@@ -56,10 +57,10 @@ plt.tight_layout()
 plt.savefig("stubborn_effect.png", dpi=150)
 print("Saved stubborn_effect.png")
 
-# ── Plot 4: Number of clusters by epsilon ─────────────────────────────────
+#Plot 4: Number of clusters by epsilon
 fig, ax = plt.subplots(figsize=(8, 5))
 for opinion_type, group in df.groupby("opinion_type"):
-    means = group.groupby("convince_range")["n_clusters"].mean()
+    means = group.groupby("confidence_threshold")["n_clusters"].mean()
     ax.plot(means.index, means.values, marker="o", label=opinion_type)
 ax.set_xlabel("Confidence Threshold (ε)")
 ax.set_ylabel("Mean Number of Clusters")
@@ -68,5 +69,18 @@ ax.legend()
 plt.tight_layout()
 plt.savefig("clusters_vs_epsilon.png", dpi=150)
 print("Saved clusters_vs_epsilon.png")
+
+# Plot 5
+fig, ax = plt.subplots(figsize=(10, 5))
+for interaction_mode, group in df.groupby("interaction_mode"):
+    means = group.groupby("confidence_threshold")["convergence_step"].mean()
+    ax.plot(means.index, means.values, marker="o", label=interaction_mode)
+ax.set_xlabel("Confidence Threshold (ε)")
+ax.set_ylabel("Mean Convergence Step")
+ax.set_title("Convergence Speed vs Confidence Threshold by Interaction Mode")
+ax.legend()
+plt.tight_layout()
+plt.savefig("convergence_vs_interaction_mode.png", dpi=150)
+print("Saved convergence_vs_interaction_mode.png")
 
 plt.show()

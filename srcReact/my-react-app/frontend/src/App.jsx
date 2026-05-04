@@ -14,7 +14,7 @@ function App() {
   // Grid state comes back from the backend on every step/reset
   const [simState, setSimState] = useState({ agents: [], grid_length: 10, step: 0 })
 
-  const [gridSize, setGridSize]               = useState(10);
+  const [gridSize, setGridSize] = useState(10);
   const [convinceRange, setConvinceRange]     = useState(1.0);
   const [convergenceMult, setConvergenceMult] = useState(0.5);
   const [opinionType, setOpinionType]         = useState("continuous");
