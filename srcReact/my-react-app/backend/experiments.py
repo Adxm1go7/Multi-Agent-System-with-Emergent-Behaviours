@@ -14,9 +14,9 @@ from Model import OpinionDynamicsModel, OpinionScenario
 
 SWEEP = {
     "interaction_mode": ["single"],
-    "confidence_threshold":   [0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5, 1.0], # Confidence Threshold
-    "converge_mult":    [0.1, 0.2, 0.3],
-    "grid_length":      [10, 20],
+    "confidence_threshold":   [0.1, 0.15], # Confidence Threshold
+    "converge_mult":    [0.1, 0.3],
+    "grid_length":      [10],
     "opinion_type":     ["continuous"],
     "stubborn_fraction":[0.0],
 }
